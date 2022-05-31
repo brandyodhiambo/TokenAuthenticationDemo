@@ -1,0 +1,141 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.devtools.ksp' version '1.6.10-1.0.4'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'kotlin-parcelize'
+}
+
+android {
+    compileSdk 32
+
+    kotlin {
+        sourceSets {
+            debug {
+                kotlin.srcDir("build/generated/ksp/debug/kotlin")
+            }
+            release {
+                kotlin.srcDir("build/generated/ksp/release/kotlin")
+            }
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.example.tokenauthenticationdemo"
+        minSdk 21
+        targetSdk 32
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_version
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation 'androidx.activity:activity-compose:1.3.1'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+
+
+
+
+    //Dagger - Hilt
+    def hiltViewmodel = "1.0.0-alpha03"
+    //def hiltFragment = "1.0.0"
+    def hiltVersion = "2.40.5"
+    def hiltCompiler = "1.0.0"
+    implementation "com.google.dagger:hilt-android:$hiltVersion"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.test.espresso:espresso-contrib:3.4.0'
+    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
+    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hiltViewmodel"
+    kapt "androidx.hilt:hilt-compiler:$hiltCompiler"
+
+    // Activity KTX for viewModels()
+    def viewModelActivity = "1.4.0"
+    implementation "androidx.activity:activity-ktx:$viewModelActivity"
+
+
+    // Architectural Components
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
+
+    // Retrofit
+    def retrofitVersion = "2.9.0"
+    def okHttpVersion= "4.9.1"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+
+    // Coroutines
+    def coroutinesVersion ="1.6.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
+
+    // Coroutine Lifecycle Scopes
+    def lifecycleVersion = "2.4.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
+
+
+    //Room Database
+    def room_version = "2.4.0"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    //timber
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
+    // Kotlin Extensions and Coroutines support for Room
+    def roomkxt = "2.4.2"
+    implementation "androidx.room:room-ktx:$roomkxt"
+
+    // Logging Interceptor
+    def interceptor_version = "4.9.1"
+    implementation "com.squareup.okhttp3:logging-interceptor:$interceptor_version"
+
+
+    //navigation
+    def nav_version = "2.4.2"
+    implementation "androidx.navigation:navigation-compose:$nav_version"
+    implementation 'io.github.raamcosta.compose-destinations:core:1.3.4-beta'
+    ksp 'io.github.raamcosta.compose-destinations:ksp:1.3.4-beta'
+}
