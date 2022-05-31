@@ -1,7 +1,7 @@
 package com.example.tokenauthenticationdemo.utils
 
 object Constants {
-    const val BASE_URL = "https://new-axis-backend-api.herokuapp.com/v1"
+    const val BASE_URL = "https://new-axis-backend-api.herokuapp.com/v1/"
     const val  LOGIN_ENDPOINT = "/auth/login"
     const val  REGISTER_ENDPOINT = "/auth/register"
     const val  REFRESH_ENDPOINT = "/auth/token/refresh"

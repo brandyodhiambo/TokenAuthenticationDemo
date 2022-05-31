@@ -1,8 +1,11 @@
 package com.example.tokenauthenticationdemo.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -10,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -18,18 +22,19 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tokenauthenticationdemo.ui.screens.destinations.LoginScreenDestination
 import com.example.tokenauthenticationdemo.ui.theme.*
+import com.example.tokenauthenticationdemo.viewmodel.AuthViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-
 
 @Destination(start = true)
 @Composable
 fun RegisterScreen(
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    viewModel: AuthViewModel = hiltViewModel()
 ) {
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
@@ -37,8 +42,8 @@ fun RegisterScreen(
             .fillMaxSize()
             .background(DarkPurple)
     ) {
-
-        Spacer(modifier = Modifier.height(64.dp))
+        val state = viewModel.register.value
+        Spacer(modifier = Modifier.height(40.dp))
         Text(
             text = "Will Manager",
             textAlign = TextAlign.Center,
@@ -58,7 +63,7 @@ fun RegisterScreen(
             fontWeight = FontWeight.Bold,
             color = white
         )
-        Spacer(modifier = Modifier.height(56.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         Text(
             text = "Name",
@@ -70,13 +75,12 @@ fun RegisterScreen(
             color = white
         )
         Spacer(modifier = Modifier.height(8.dp))
-        var text by remember { mutableStateOf("") }
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 8.dp, end = 8.dp),
-            value = text,
-            onValueChange = { text = it },
+            value = viewModel.nameState.value,
+            onValueChange = { viewModel.setName(it) },
             label = {
                 Text(
                     "Enter Name",
@@ -90,7 +94,7 @@ fun RegisterScreen(
             )
         )
 
-        Spacer(modifier = Modifier.height(56.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = "Email",
@@ -102,13 +106,12 @@ fun RegisterScreen(
             color = white
         )
         Spacer(modifier = Modifier.height(8.dp))
-        var textEmail by remember { mutableStateOf("") }
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 8.dp, end = 8.dp),
-            value = textEmail,
-            onValueChange = { textEmail = it },
+            value = viewModel.emailState.value,
+            onValueChange = { viewModel.setEmail(it) },
             label = {
                 Text(
                     "Enter Email",
@@ -137,8 +140,8 @@ fun RegisterScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 8.dp, end = 8.dp),
-            value = password,
-            onValueChange = { password = it },
+            value = viewModel.passwordState.value,
+            onValueChange = { viewModel.setPassword(it) },
             label = {
                 Text(
                     "Enter password",
@@ -168,8 +171,8 @@ fun RegisterScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 8.dp, end = 8.dp),
-            value = password,
-            onValueChange = { password = it },
+            value = viewModel.confirmPasswordState.value,
+            onValueChange = { viewModel.setConfirmPassword(it) },
             label = {
                 Text(
                     "Re-enter password",
@@ -189,8 +192,7 @@ fun RegisterScreen(
         Button(
             colors = ButtonDefaults.buttonColors(Orange),
             onClick = {
-                navigator.popBackStack()
-                navigator.navigate(LoginScreenDestination)
+                viewModel.registerUsers()
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -220,6 +222,19 @@ fun RegisterScreen(
             color = white,
         )
 
-    }
+        val context = LocalContext.current
 
+        if (state.isLoading){
+            CircularProgressIndicator()
+        }
+        if (state.error != null){
+            Toast.makeText(context, state.error.toString(), Toast.LENGTH_SHORT).show()
+        }
+
+        if (state.isSuccessful){
+            Toast.makeText(context, state.successMessage, Toast.LENGTH_SHORT).show()
+            navigator.popBackStack()
+            navigator.navigate(LoginScreenDestination)
+        }
+    }
 }
