@@ -16,41 +16,26 @@ import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
-class AuthRepository @Inject constructor(private val apiService: ApiService) : SafeApiCall() {
+class AuthRepository (private val apiService: ApiService){
 
     //register
     suspend fun registerUser(registerRequest: RegisterRequest): Resource<RegisterResponse> {
-        //return withContext(Dispatchers.IO) {
-            //safeApiCall {
-                /*apiService.registerUser(registerRequest).enqueue(object : Callback<RefreshModel> {
-                    override fun onResponse(
-                        call: Call<RefreshModel>,
-                        response: Response<RefreshModel>
-                    ) {
-                        //Toast.makeText(coroutineContext, "", Toast.LENGTH_SHORT).show()
-                    }
-                    override fun onFailure(call: Call<RefreshModel>, t: Throwable) {
-                        //TODO("Not yet implemented")
-                    }
-                })*/
-                return try {
-                    val response = apiService.registerUser(registerRequest)
-                    Timber.d(response.message)
+        return try {
+            val response = apiService.registerUser(registerRequest)
+            Timber.d(response.message)
 
-                    if (response.message == "user created successfully"){
-                        Resource.Success(data = response)
-                    }else{
-                        Resource.Failure(response.errors.errr)
-                    }
+            if (response.message == "user created successfully") {
+                Resource.Success(data = response)
+            } else {
+                Resource.Failure(response.errors.errr)
+            }
+        } catch (e: IOException) {
+            return Resource.Failure("Oops! couldn't reach server, check your internet connection.")
+        } catch (e: HttpException) {
+            return Resource.Failure("Oops! something went wrong. Please try again")
+        }
 
-
-                }catch (e: Exception){
-                    return Resource.Failure("Registration failed, try again")
-                }
-
-
-       // }
     }
-    
+
 }
 

@@ -12,6 +12,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
@@ -36,16 +37,16 @@ fun RegisterScreen(
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .background(DarkPurple)
     ) {
         val state = viewModel.register.value
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = "Will Manager",
+            text = "Demo",
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth(),
@@ -63,8 +64,7 @@ fun RegisterScreen(
             fontWeight = FontWeight.Bold,
             color = white
         )
-        Spacer(modifier = Modifier.height(32.dp))
-
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = "Name",
             textAlign = TextAlign.Justify,
@@ -74,7 +74,6 @@ fun RegisterScreen(
             fontSize = 16.sp,
             color = white
         )
-        Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -84,18 +83,17 @@ fun RegisterScreen(
             label = {
                 Text(
                     "Enter Name",
-                    color = white
                 )
             },
+            placeholder = { Text(text = "John Doe") },
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Pink,
                 unfocusedBorderColor = DarkGray
-            )
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
-
-        Spacer(modifier = Modifier.height(8.dp))
-
+        Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = "Email",
             textAlign = TextAlign.Justify,
@@ -105,7 +103,6 @@ fun RegisterScreen(
             fontSize = 16.sp,
             color = white
         )
-        Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -115,16 +112,77 @@ fun RegisterScreen(
             label = {
                 Text(
                     "Enter Email",
-                    color = white
                 )
             },
+            placeholder = { Text(text = "johndoe@gmail.com") },
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Pink,
                 unfocusedBorderColor = DarkGray
-            )
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
         )
-        Spacer(modifier = Modifier.height(8.dp))
+
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "Country Code",
+            textAlign = TextAlign.Justify,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp),
+            fontSize = 16.sp,
+            color = white
+        )
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp, end = 8.dp),
+            value = viewModel.countryCodeState.value,
+            onValueChange = { viewModel.setCountryCode(it) },
+            label = {
+                Text(
+                    "Enter country code",
+                )
+            },
+            placeholder = { Text(text = "254") },
+            shape = RoundedCornerShape(8.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Pink,
+                unfocusedBorderColor = DarkGray
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = "Phone Number",
+            textAlign = TextAlign.Justify,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp),
+            fontSize = 16.sp,
+            color = white
+        )
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp, end = 8.dp),
+            value = viewModel.phoneState.value,
+            onValueChange = { viewModel.setPhone(it) },
+            label = {
+                Text(
+                    "Enter Phone Number",
+                )
+            },
+            placeholder = { Text(text = "0712345678") },
+            shape = RoundedCornerShape(8.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = Pink,
+                unfocusedBorderColor = DarkGray
+            ),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+
         Text(
             text = "Password",
             textAlign = TextAlign.Justify,
@@ -134,8 +192,6 @@ fun RegisterScreen(
             fontSize = 16.sp,
             color = white
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        var password by rememberSaveable { mutableStateOf("") }
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -145,9 +201,9 @@ fun RegisterScreen(
             label = {
                 Text(
                     "Enter password",
-                    color = white
                 )
             },
+            placeholder = { Text(text = "Strong Password") },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             shape = RoundedCornerShape(8.dp),
@@ -156,7 +212,7 @@ fun RegisterScreen(
                 unfocusedBorderColor = DarkGray
             )
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = "Confirm Password",
             textAlign = TextAlign.Justify,
@@ -166,7 +222,6 @@ fun RegisterScreen(
             fontSize = 16.sp,
             color = white
         )
-        Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -176,9 +231,9 @@ fun RegisterScreen(
             label = {
                 Text(
                     "Re-enter password",
-                    color = white
                 )
             },
+            placeholder = { Text(text = "Strong Password") },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             shape = RoundedCornerShape(8.dp),
@@ -187,8 +242,7 @@ fun RegisterScreen(
                 unfocusedBorderColor = DarkGray
             )
         )
-        Spacer(modifier = Modifier.height(8.dp))
-
+        Spacer(modifier = Modifier.height(4.dp))
         Button(
             colors = ButtonDefaults.buttonColors(Orange),
             onClick = {
@@ -201,7 +255,7 @@ fun RegisterScreen(
         ) {
             Text(text = "Sign up", color = white)
         }
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(2.dp))
         Text(
             text = buildAnnotatedString {
                 val boldStyle = SpanStyle(
@@ -224,14 +278,16 @@ fun RegisterScreen(
 
         val context = LocalContext.current
 
-        if (state.isLoading){
-            CircularProgressIndicator()
+        if (state.isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(CenterHorizontally)
+            )
         }
-        if (state.error != null){
+        if (state.error != null) {
             Toast.makeText(context, state.error.toString(), Toast.LENGTH_SHORT).show()
         }
 
-        if (state.isSuccessful){
+        if (state.isSuccessful) {
             Toast.makeText(context, state.successMessage, Toast.LENGTH_SHORT).show()
             navigator.popBackStack()
             navigator.navigate(LoginScreenDestination)

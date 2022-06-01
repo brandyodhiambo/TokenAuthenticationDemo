@@ -53,7 +53,9 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
     fun setPhone(value: String){
         _phoneState.value = value
     }
-
+    fun setCountryCode(value: String) {
+        _countryCodeState.value = value
+    }
     fun setPassword(value: String){
         _passwordState.value = value
     }
@@ -63,31 +65,34 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
     }
 
     fun registerUsers(){
-/*        var error = if(nameState.value.isBlank()||emailState.value.isBlank()||phoneState.value.isBlank()||passwordState.value.isBlank()||confirmPasswordState.value.isBlank()){
-            "Null Values"
+        var error = if(nameState.value.isBlank()||emailState.value.isBlank()||phoneState.value.isBlank()||passwordState.value.isBlank()||confirmPasswordState.value.isBlank()){
+            "Null Values are not accepted"
         }  else if (phoneState.value.length < MIN_PHONE_LENGTH) {
             "Phone to short"
         } else if (phoneState.value.length > MIN_PHONE_LENGTH) {
             "Phone to long"
         }else if (passwordState.value.length<MIN_PASSWORD_LENGTH){
             "Password too short"
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(emailState.value).matches()){
+        }else if (passwordState.value.length != confirmPasswordState.value.length){
+            "Password Don't match"
+        }
+        else if (!Patterns.EMAIL_ADDRESS.matcher(emailState.value).matches()){
             "Email not valid"
         } else null
 
         error?.let {
             _register.value = AuthState(error = it)
             return
-        }*/
+        }
         _register.value = AuthState(isLoading = true)
         viewModelScope.launch(Dispatchers.Main){
             val request = RegisterRequest(
-                confirm_password = /*confirmPasswordState.value*/"12345678",
-                country_code = /*countryCodeState.value*/"254",
-                email = /*emailState.value*/ "brandy2dfgd@gmail.com",
-                name = /*nameState.value*/ "brandy",
-                password = /*passwordState.value*/ "12345678",
-                phone_number = /*phoneState.value*/"0712345678"
+                confirm_password = confirmPasswordState.value,
+                country_code = countryCodeState.value,
+                email = emailState.value,
+                name = nameState.value,
+                password = passwordState.value,
+                phone_number =phoneState.value
             )
             when(val result = authRepository.registerUser(request)){
                 is Resource.Success -> {
@@ -98,7 +103,7 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
                     _register.value = AuthState(isLoading = false, error = result.message)
                     Timber.d(result.message)
                 }
-                else -> {}
+                else -> Unit
             }
         }
     }
