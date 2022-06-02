@@ -80,6 +80,8 @@ fun RegisterScreen(
             label = {
                 Text(
                     "Enter Name",
+                    color = white
+
                 )
             },
             placeholder = { Text(text = "John Doe") },
@@ -109,6 +111,8 @@ fun RegisterScreen(
             label = {
                 Text(
                     "Enter Email",
+                    color = white
+
                 )
             },
             placeholder = { Text(text = "johndoe@gmail.com") },
@@ -139,6 +143,8 @@ fun RegisterScreen(
             label = {
                 Text(
                     "Enter country code",
+                    color = white
+
                 )
             },
             placeholder = { Text(text = "254") },
@@ -168,6 +174,8 @@ fun RegisterScreen(
             label = {
                 Text(
                     "Enter Phone Number",
+                    color = white
+
                 )
             },
             placeholder = { Text(text = "0712345678") },
@@ -198,6 +206,8 @@ fun RegisterScreen(
             label = {
                 Text(
                     "Enter password",
+                    color = white
+
                 )
             },
             placeholder = { Text(text = "Strong Password") },
@@ -228,6 +238,7 @@ fun RegisterScreen(
             label = {
                 Text(
                     "Re-enter password",
+                    color = white
                 )
             },
             placeholder = { Text(text = "Strong Password") },
@@ -247,7 +258,7 @@ fun RegisterScreen(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp),
+                .padding(start = 8.dp, end = 8.dp),
             shape = RoundedCornerShape(10.dp),
         ) {
             Text(text = "Sign up", color = white)

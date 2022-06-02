@@ -2,7 +2,7 @@ package com.example.tokenauthenticationdemo.data.remote
 
 import com.example.tokenauthenticationdemo.data.remote.request.LoginRequest
 import com.example.tokenauthenticationdemo.data.remote.request.RegisterRequest
-import com.example.tokenauthenticationdemo.data.remote.response.LoginResponse
+import com.example.tokenauthenticationdemo.data.remote.response.loginres.LoginResponse
 import com.example.tokenauthenticationdemo.data.remote.response.RegisterResponse
 import com.example.tokenauthenticationdemo.models.*
 import com.example.tokenauthenticationdemo.utils.Constants.FORGOT_PASSWORD_ENDPOINT
@@ -23,7 +23,7 @@ interface ApiService {
     @POST(LOGIN_ENDPOINT)
      suspend fun loginUser(
         @Body loginRequest: LoginRequest
-    ):LoginResponse
+    ): LoginResponse
 
     @POST(FORGOT_PASSWORD_ENDPOINT)
     @FormUrlEncoded

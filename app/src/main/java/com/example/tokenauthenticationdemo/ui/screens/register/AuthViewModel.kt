@@ -65,7 +65,7 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
     }
 
     fun registerUsers(){
-        var error = if(nameState.value.isBlank()||emailState.value.isBlank()||phoneState.value.isBlank()||passwordState.value.isBlank()||confirmPasswordState.value.isBlank()){
+        var error = if(nameState.value.isBlank()||emailState.value.isBlank()||phoneState.value.isBlank()||countryCodeState.value.isBlank()||passwordState.value.isBlank()||confirmPasswordState.value.isBlank()){
             "Null Values are not accepted"
         }  else if (phoneState.value.length < MIN_PHONE_LENGTH) {
             "Phone to short"

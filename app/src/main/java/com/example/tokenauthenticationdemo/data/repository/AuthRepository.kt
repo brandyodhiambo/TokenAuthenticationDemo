@@ -1,23 +1,15 @@
 package com.example.tokenauthenticationdemo.data.repository
 
 import com.example.tokenauthenticationdemo.data.remote.ApiService
-import com.example.tokenauthenticationdemo.data.remote.SafeApiCall
 import com.example.tokenauthenticationdemo.data.remote.request.LoginRequest
-import com.example.tokenauthenticationdemo.models.RefreshModel
 import com.example.tokenauthenticationdemo.data.remote.request.RegisterRequest
-import com.example.tokenauthenticationdemo.data.remote.response.LoginResponse
+import com.example.tokenauthenticationdemo.data.remote.response.loginres.LoginResponse
 import com.example.tokenauthenticationdemo.data.remote.response.RegisterResponse
 import com.example.tokenauthenticationdemo.ui.screens.login.SessionManager
 import com.example.tokenauthenticationdemo.utils.Resource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.HttpException
-import retrofit2.Response
 import timber.log.Timber
 import java.io.IOException
-import javax.inject.Inject
 
 class AuthRepository (private val apiService: ApiService){
 
@@ -46,6 +38,7 @@ class AuthRepository (private val apiService: ApiService){
             val response = apiService.loginUser(loginRequest)
             val loginResponse = response.copy()
             run {
+               // sessionManager = SessionManager(this)
                 sessionManager.saveAuthToken(loginResponse.accessToken)
                 Resource.Success(response)
             }
