@@ -1,4 +1,4 @@
-package com.example.tokenauthenticationdemo.viewmodel
+package com.example.tokenauthenticationdemo.ui.screens.register
 
 import android.util.Patterns
 import androidx.compose.runtime.State

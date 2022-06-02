@@ -1,6 +1,8 @@
 package com.example.tokenauthenticationdemo.data.remote
 
+import com.example.tokenauthenticationdemo.data.remote.request.LoginRequest
 import com.example.tokenauthenticationdemo.data.remote.request.RegisterRequest
+import com.example.tokenauthenticationdemo.data.remote.response.LoginResponse
 import com.example.tokenauthenticationdemo.data.remote.response.RegisterResponse
 import com.example.tokenauthenticationdemo.models.*
 import com.example.tokenauthenticationdemo.utils.Constants.FORGOT_PASSWORD_ENDPOINT
@@ -13,17 +15,15 @@ import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
 interface ApiService {
-    @POST("auth/register")
-    //@FormUrlEncoded
+    @POST(REGISTER_ENDPOINT)
    suspend fun registerUser(
         @Body registerRequest: RegisterRequest
     ): RegisterResponse
 
     @POST(LOGIN_ENDPOINT)
-    @FormUrlEncoded
      suspend fun loginUser(
-        @Body loginModel: LoginModel
-    ):Call<RefreshModel>
+        @Body loginRequest: LoginRequest
+    ):LoginResponse
 
     @POST(FORGOT_PASSWORD_ENDPOINT)
     @FormUrlEncoded
