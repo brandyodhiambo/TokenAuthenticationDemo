@@ -1,4 +1,4 @@
-package com.example.tokenauthenticationdemo.data.remote.response
+package com.example.tokenauthenticationdemo.data.remote.response.registerres
 
 data class RegisterResponse(
     val `data`: Data,
@@ -8,4 +8,4 @@ data class RegisterResponse(
     val code: Int,
     val errors: Errors,
 
-)
+    )

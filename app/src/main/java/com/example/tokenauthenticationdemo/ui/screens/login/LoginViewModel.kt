@@ -14,7 +14,6 @@ import com.example.tokenauthenticationdemo.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -51,7 +50,7 @@ class LoginViewModel @Inject constructor(private val authRepository: AuthReposit
             return
         }
         _login.value = AuthState(isLoading = true)
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch{
             val request = LoginRequest(
                 email = emailState.value,
                 password = passwordState.value

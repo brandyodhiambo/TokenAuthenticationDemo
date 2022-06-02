@@ -4,7 +4,7 @@ import com.example.tokenauthenticationdemo.data.remote.ApiService
 import com.example.tokenauthenticationdemo.data.remote.request.LoginRequest
 import com.example.tokenauthenticationdemo.data.remote.request.RegisterRequest
 import com.example.tokenauthenticationdemo.data.remote.response.loginres.LoginResponse
-import com.example.tokenauthenticationdemo.data.remote.response.RegisterResponse
+import com.example.tokenauthenticationdemo.data.remote.response.registerres.RegisterResponse
 import com.example.tokenauthenticationdemo.ui.screens.login.SessionManager
 import com.example.tokenauthenticationdemo.utils.Resource
 import retrofit2.HttpException
@@ -33,15 +33,16 @@ class AuthRepository (private val apiService: ApiService){
 
     //login
     suspend fun loginUser(loginRequest: LoginRequest): Resource<LoginResponse>{
-        lateinit var sessionManager: SessionManager
+       // lateinit var sessionManager: SessionManager
         return try {
             val response = apiService.loginUser(loginRequest)
-            val loginResponse = response.copy()
-            run {
+            //val loginResponse = response.copy()
+            Resource.Success(response)
+          /*  run {
                // sessionManager = SessionManager(this)
                 sessionManager.saveAuthToken(loginResponse.accessToken)
                 Resource.Success(response)
-            }
+            }*/
         }catch (e: IOException) {
             return Resource.Failure("Oops! couldn't reach server, check your internet connection.")
         } catch (e: HttpException) {

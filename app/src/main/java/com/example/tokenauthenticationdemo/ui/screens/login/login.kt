@@ -65,15 +65,6 @@ fun LoginScreen(
             color = white
         )
         Spacer(modifier = Modifier.height(32.dp))
-        Text(
-            text = "Email",
-            textAlign = TextAlign.Justify,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp),
-            fontSize = 16.sp,
-            color = white
-        )
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -90,22 +81,12 @@ fun LoginScreen(
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Pink,
-                unfocusedBorderColor = DarkGray
+                unfocusedBorderColor = DarkGray,
+                textColor = white
             ),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Password",
-            textAlign = TextAlign.Justify,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp),
-            fontSize = 16.sp,
-            color = white
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        var password by rememberSaveable { mutableStateOf("") }
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -124,7 +105,8 @@ fun LoginScreen(
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Pink,
-                unfocusedBorderColor = DarkGray
+                unfocusedBorderColor = DarkGray,
+                textColor = white
             )
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -169,22 +151,22 @@ fun LoginScreen(
 
 
         val context = LocalContext.current
-
         if(state.isLoading){
             CircularProgressIndicator(
                 modifier = Modifier.align(CenterHorizontally)
             )
         }
-
         if (state.error != null) {
             Toast.makeText(context, state.error.toString(), Toast.LENGTH_SHORT).show()
         }
-
         if (state.isSuccessful) {
             Toast.makeText(context, state.successMessage, Toast.LENGTH_SHORT).show()
             navigator.popBackStack()
-            navigator.navigate(LoginScreenDestination)
+            navigator.navigate(HomeScreenDestination)
         }
+       /* LaunchedEffect(key1 = true ){
+
+        }*/
     }
 
 }

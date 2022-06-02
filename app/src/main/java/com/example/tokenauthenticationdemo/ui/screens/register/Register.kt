@@ -43,7 +43,7 @@ fun RegisterScreen(
         val state = viewModel.register.value
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = "Demo",
+            text = "Will Manager",
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth(),
@@ -61,16 +61,7 @@ fun RegisterScreen(
             fontWeight = FontWeight.Bold,
             color = white
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Name",
-            textAlign = TextAlign.Justify,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp),
-            fontSize = 16.sp,
-            color = white
-        )
+        Spacer(modifier = Modifier.height(10.dp))
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -88,20 +79,12 @@ fun RegisterScreen(
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Pink,
-                unfocusedBorderColor = DarkGray
+                unfocusedBorderColor = DarkGray,
+                textColor = white
             ),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-        )
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            )
         Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "Email",
-            textAlign = TextAlign.Justify,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp),
-            fontSize = 16.sp,
-            color = white
-        )
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -119,21 +102,13 @@ fun RegisterScreen(
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Pink,
-                unfocusedBorderColor = DarkGray
+                unfocusedBorderColor = DarkGray,
+                textColor = white
             ),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
         )
 
         Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "Country Code",
-            textAlign = TextAlign.Justify,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp),
-            fontSize = 16.sp,
-            color = white
-        )
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -151,20 +126,12 @@ fun RegisterScreen(
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Pink,
-                unfocusedBorderColor = DarkGray
+                unfocusedBorderColor = DarkGray,
+                textColor = white
             ),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
         Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "Phone Number",
-            textAlign = TextAlign.Justify,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp),
-            fontSize = 16.sp,
-            color = white
-        )
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -182,21 +149,12 @@ fun RegisterScreen(
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Pink,
-                unfocusedBorderColor = DarkGray
+                unfocusedBorderColor = DarkGray,
+                textColor = white
             ),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
         )
         Spacer(modifier = Modifier.height(4.dp))
-
-        Text(
-            text = "Password",
-            textAlign = TextAlign.Justify,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp),
-            fontSize = 16.sp,
-            color = white
-        )
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -216,19 +174,11 @@ fun RegisterScreen(
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Pink,
-                unfocusedBorderColor = DarkGray
+                unfocusedBorderColor = DarkGray,
+                textColor = white
             )
         )
         Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "Confirm Password",
-            textAlign = TextAlign.Justify,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 8.dp),
-            fontSize = 16.sp,
-            color = white
-        )
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -247,7 +197,8 @@ fun RegisterScreen(
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 focusedBorderColor = Pink,
-                unfocusedBorderColor = DarkGray
+                unfocusedBorderColor = DarkGray,
+                textColor = white
             )
         )
         Spacer(modifier = Modifier.height(4.dp))
@@ -297,8 +248,14 @@ fun RegisterScreen(
 
         if (state.isSuccessful) {
             Toast.makeText(context, state.successMessage, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Check your email to verify your account", Toast.LENGTH_SHORT).show()
             navigator.popBackStack()
             navigator.navigate(LoginScreenDestination)
         }
+
+       /* LaunchedEffect(key1 = true) {
+
+        }*/
+
     }
 }
