@@ -1,15 +1,19 @@
 package com.example.tokenauthenticationdemo.data.repository
 
 import com.example.tokenauthenticationdemo.data.remote.ApiService
+import com.example.tokenauthenticationdemo.data.remote.request.ForgotPasswordRequest
 import com.example.tokenauthenticationdemo.data.remote.request.LoginRequest
 import com.example.tokenauthenticationdemo.data.remote.request.RegisterRequest
+import com.example.tokenauthenticationdemo.data.remote.response.forgotpassword.ForgotPassworResponse
 import com.example.tokenauthenticationdemo.data.remote.response.loginres.LoginResponse
 import com.example.tokenauthenticationdemo.data.remote.response.registerres.RegisterResponse
 import com.example.tokenauthenticationdemo.ui.screens.login.SessionManager
 import com.example.tokenauthenticationdemo.utils.Resource
 import retrofit2.HttpException
+import retrofit2.Response
 import timber.log.Timber
 import java.io.IOException
+import java.lang.Exception
 
 class AuthRepository (private val apiService: ApiService){
 
@@ -49,6 +53,17 @@ class AuthRepository (private val apiService: ApiService){
             return Resource.Failure("Oops! something went wrong. Please try again")
         }
     }
+
+    //forgot password
+    suspend fun forgotPassword(email:String) :Resource<ForgotPassworResponse>{
+        return try {
+            val response = apiService.forgotPassword(email)
+            Resource.Success(response)
+        } catch (e:Exception){
+            return Resource.Failure("Not Registered")
+        }
+    }
+
 
 }
 

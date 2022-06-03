@@ -23,7 +23,6 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
     private val _register = mutableStateOf(AuthState())
     val register: State<AuthState> = _register
 
-
     private val _nameState = mutableStateOf("")
      val nameState:State<String> = _nameState
 
@@ -97,7 +96,7 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
             when(val result = authRepository.registerUser(request)){
                 is Resource.Success -> {
                     _register.value = AuthState(isLoading = false, isSuccessful = true, successMessage = result.data?.message)
-                    Timber.d("Account Created Successfully")
+                  //  authRepository.verify(emailState.value)
                 }
                 is Resource.Failure ->{
                     _register.value = AuthState(isLoading = false, error = result.message)

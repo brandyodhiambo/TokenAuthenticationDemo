@@ -1,11 +1,11 @@
-package com.example.tokenauthenticationdemo.data.remote.response.verification
+package com.example.tokenauthenticationdemo.data.remote.response.forgotpassword
 
 
 import com.google.gson.annotations.SerializedName
 
-data class VerificationResponse(
+data class ForgotPassworResponse(
     @SerializedName("data")
-    val `data`: Data,
+    val `data`: Any,
     @SerializedName("links")
     val links: Any,
     @SerializedName("message")

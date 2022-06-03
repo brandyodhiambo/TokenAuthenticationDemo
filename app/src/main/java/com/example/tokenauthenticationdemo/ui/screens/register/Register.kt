@@ -242,20 +242,18 @@ fun RegisterScreen(
                 modifier = Modifier.align(CenterHorizontally)
             )
         }
-        if (state.error != null) {
-            Toast.makeText(context, state.error.toString(), Toast.LENGTH_SHORT).show()
+
+        LaunchedEffect(state) {
+            if (state.error != null) {
+                Toast.makeText(context, state.error.toString(), Toast.LENGTH_SHORT).show()
+            }
+            if (state.isSuccessful) {
+                Toast.makeText(context, state.successMessage, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Check your email to verify your account", Toast.LENGTH_SHORT).show()
+                navigator.popBackStack()
+                navigator.navigate(LoginScreenDestination)
+            }
         }
-
-        if (state.isSuccessful) {
-            Toast.makeText(context, state.successMessage, Toast.LENGTH_SHORT).show()
-            Toast.makeText(context, "Check your email to verify your account", Toast.LENGTH_SHORT).show()
-            navigator.popBackStack()
-            navigator.navigate(LoginScreenDestination)
-        }
-
-       /* LaunchedEffect(key1 = true) {
-
-        }*/
 
     }
 }
