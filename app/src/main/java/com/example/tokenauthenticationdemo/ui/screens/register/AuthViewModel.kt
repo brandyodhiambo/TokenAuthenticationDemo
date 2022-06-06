@@ -13,6 +13,8 @@ import com.example.tokenauthenticationdemo.utils.Constants.MIN_PHONE_LENGTH
 import com.example.tokenauthenticationdemo.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -22,6 +24,10 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
 
     private val _register = mutableStateOf(AuthState())
     val register: State<AuthState> = _register
+
+
+    private val resultChannel = Channel<Resource<Unit>>()
+    val authResult = resultChannel.receiveAsFlow()
 
     private val _nameState = mutableStateOf("")
      val nameState:State<String> = _nameState
@@ -40,6 +46,7 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
 
     private val _confirmPasswordState = mutableStateOf("")
     val confirmPasswordState:State<String> = _confirmPasswordState
+
 
 
     fun setName(value: String){
@@ -63,6 +70,9 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
         _confirmPasswordState.value = value
     }
 
+    init {
+        authorise()
+    }
     fun registerUsers(){
         var error = if(nameState.value.isBlank()||emailState.value.isBlank()||phoneState.value.isBlank()||countryCodeState.value.isBlank()||passwordState.value.isBlank()||confirmPasswordState.value.isBlank()){
             "Null Values are not accepted"
@@ -104,6 +114,18 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
                 }
                 else -> Unit
             }
+        }
+    }
+
+    private fun authorise(){
+        viewModelScope.launch {
+            _register.value = AuthState(isLoading = true)
+            val result = authRepository.authorise()
+
+            resultChannel.send(result)
+            _register.value = AuthState(isLoading = false)
+
+
         }
     }
 }

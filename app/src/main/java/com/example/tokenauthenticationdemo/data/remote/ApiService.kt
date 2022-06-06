@@ -9,12 +9,11 @@ import com.example.tokenauthenticationdemo.data.remote.response.registerres.Regi
 import com.example.tokenauthenticationdemo.models.*
 import com.example.tokenauthenticationdemo.utils.Constants.FORGOT_PASSWORD_ENDPOINT
 import com.example.tokenauthenticationdemo.utils.Constants.LOGIN_ENDPOINT
+import com.example.tokenauthenticationdemo.utils.Constants.REFRESH_ENDPOINT
 import com.example.tokenauthenticationdemo.utils.Constants.REGISTER_ENDPOINT
 import com.example.tokenauthenticationdemo.utils.Constants.RESET_PASSWORD_ENDPOINT
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface ApiService {
     //Register
@@ -42,6 +41,11 @@ interface ApiService {
     fun resetPassword(
         @Body resetPasswordModel: ResetPasswordModel
     ):Call<RefreshModel>
+
+    @GET(REFRESH_ENDPOINT)
+    suspend fun authorise(
+        @Header("Authorization") token:String
+    )
 
 
 }

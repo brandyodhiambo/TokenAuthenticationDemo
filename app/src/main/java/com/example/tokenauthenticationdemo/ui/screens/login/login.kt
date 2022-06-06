@@ -36,7 +36,6 @@ fun LoginScreen(
     navigator: DestinationsNavigator,
     viewModel:LoginViewModel = hiltViewModel()
 ) {
-    val openDialog = remember{ mutableStateOf(false)}
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -117,7 +116,8 @@ fun LoginScreen(
                 .fillMaxWidth()
                 .padding(end = 8.dp)
                 .clickable {
-                    openDialog.value = true
+                           navigator.popBackStack()
+                    navigator.navigate(PassWordDestination)
                 },
             color = white
         )
@@ -170,78 +170,7 @@ fun LoginScreen(
         }
 
 
-        //forgot password
 
-
-        if (openDialog.value) {
-            val forgotState = viewModel.forgotPass.value
-            AlertDialog(
-                modifier = Modifier
-                    .height(200.dp)
-                    .width(400.dp),
-                onDismissRequest = {
-                    openDialog.value = false
-                },
-                backgroundColor = DarkPurple,
-                title = {
-                    Text(text = "Forgot Password", color = Orange)
-                },
-                text = {
-                    Column {
-                        OutlinedTextField(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 8.dp, end = 8.dp),
-                            value = viewModel.emailState.value,
-                            onValueChange = { viewModel.setEmail(it) },
-                            placeholder = {Text(text = "johndoe@gmail.com")},
-                            label = {
-                                Text(
-                                    "Enter Email To reset Password",
-                                    color = white
-                                )
-                            },
-                            shape = RoundedCornerShape(8.dp),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                focusedBorderColor = Pink,
-                                unfocusedBorderColor = DarkGray,
-                                textColor = white
-                            ),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
-                        )
-                    }
-                },
-                confirmButton = {
-                    Button(
-                        colors = ButtonDefaults.buttonColors(Orange),
-                        onClick = {
-                            viewModel.forgotPassword()
-                        },
-                    ) {
-                        Text("Ok")
-                    }
-                },
-                dismissButton = {
-                    Button(
-                        colors = ButtonDefaults.buttonColors(Orange),
-                        onClick = {
-                            openDialog.value = false
-                        },
-                    ) {
-                        Text("Cancel")
-                    }
-                },
-            )
-
-            LaunchedEffect(forgotState){
-                if (forgotState.error != null) {
-                    Toast.makeText(context, state.error.toString(), Toast.LENGTH_SHORT).show()
-                }
-                if (forgotState.isSuccessful) {
-                    Toast.makeText(context, "Check email to change password", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
 
     }
 

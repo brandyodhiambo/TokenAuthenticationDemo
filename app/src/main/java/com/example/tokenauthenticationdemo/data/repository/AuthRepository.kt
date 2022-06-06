@@ -1,5 +1,7 @@
 package com.example.tokenauthenticationdemo.data.repository
 
+import android.content.SharedPreferences
+import androidx.compose.ui.platform.LocalContext
 import com.example.tokenauthenticationdemo.data.remote.ApiService
 import com.example.tokenauthenticationdemo.data.remote.request.ForgotPasswordRequest
 import com.example.tokenauthenticationdemo.data.remote.request.LoginRequest
@@ -15,7 +17,10 @@ import timber.log.Timber
 import java.io.IOException
 import java.lang.Exception
 
-class AuthRepository (private val apiService: ApiService){
+class AuthRepository(
+    private val apiService: ApiService,
+    private val pref: SharedPreferences
+){
 
     //register
     suspend fun registerUser(registerRequest: RegisterRequest): Resource<RegisterResponse> {
@@ -31,36 +36,60 @@ class AuthRepository (private val apiService: ApiService){
         } catch (e: IOException) {
             return Resource.Failure("Oops! couldn't reach server, check your internet connection.")
         } catch (e: HttpException) {
+            if (e.code() == 409)
+            {
+                return Resource.Failure("User already exist")
+            } else if (e.code() == 400){
+                return Resource.Failure("CountryCode must be a valid numeric value")
+            }
             return Resource.Failure("Oops! something went wrong. Please try again")
+
         }
     }
 
     //login
     suspend fun loginUser(loginRequest: LoginRequest): Resource<LoginResponse>{
-       // lateinit var sessionManager: SessionManager
+       //lateinit var sessionManager: SessionManager
         return try {
             val response = apiService.loginUser(loginRequest)
-            //val loginResponse = response.copy()
+            pref.edit()
+                .putString("token",response.accessToken)
+                .apply()
+
             Resource.Success(response)
-          /*  run {
-               // sessionManager = SessionManager(this)
-                sessionManager.saveAuthToken(loginResponse.accessToken)
-                Resource.Success(response)
-            }*/
+            //val loginResponse = response.copy()
+            /* run {
+                sessionManager = SessionManager(this)
+                 sessionManager.saveAuthToken(loginResponse.accessToken)
+                 Resource.Success(response)
+             }*/
         }catch (e: IOException) {
             return Resource.Failure("Oops! couldn't reach server, check your internet connection.")
         } catch (e: HttpException) {
+            if (e.code()==404){
+                return Resource.Failure("Incorrect password, check your credential")
+            }
             return Resource.Failure("Oops! something went wrong. Please try again")
         }
     }
 
     //forgot password
-    suspend fun forgotPassword(email:String) :Resource<ForgotPassworResponse>{
+     fun forgotPassword(email:String) :Resource<ForgotPassworResponse>{
         return try {
             val response = apiService.forgotPassword(email)
             Resource.Success(response)
         } catch (e:Exception){
             return Resource.Failure("Not Registered")
+        }
+    }
+
+    suspend fun authorise():Resource<Unit>{
+        return try{
+            val token  =pref.getString("token",null)?: return Resource.Failure("Not Verified")
+            apiService.authorise("Bearer $token")
+            Resource.Authorised()
+        } catch (e:Exception){
+            return Resource.Failure("Unknown Error")
         }
     }
 

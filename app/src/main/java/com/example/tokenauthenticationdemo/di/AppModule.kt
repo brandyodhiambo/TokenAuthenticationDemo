@@ -1,5 +1,6 @@
 package com.example.tokenauthenticationdemo.di
 
+import android.content.SharedPreferences
 import com.example.tokenauthenticationdemo.data.remote.ApiService
 import com.example.tokenauthenticationdemo.data.repository.AuthRepository
 import com.example.tokenauthenticationdemo.utils.Constants.BASE_URL
@@ -27,8 +28,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMainRepository(apiService: ApiService):AuthRepository{
-        return AuthRepository(apiService)
+    fun provideMainRepository(apiService: ApiService,preferences: SharedPreferences):AuthRepository{
+        return AuthRepository(apiService,preferences)
     }
 
 

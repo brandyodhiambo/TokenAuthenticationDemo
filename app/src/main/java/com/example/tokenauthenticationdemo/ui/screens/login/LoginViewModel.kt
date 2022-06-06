@@ -23,9 +23,6 @@ class LoginViewModel @Inject constructor(private val authRepository: AuthReposit
     private val _login = mutableStateOf(AuthState())
     val login :State<AuthState> = _login
 
-    //forgot Password
-    private val _forgotPass = mutableStateOf(AuthState())
-    val forgotPass:State<AuthState> = _forgotPass
 
     private val _emailState=  mutableStateOf("")
     val emailState:State<String> = _emailState
@@ -75,27 +72,6 @@ class LoginViewModel @Inject constructor(private val authRepository: AuthReposit
 
     }
 
-    //forgot password
-    fun forgotPassword(){
-        if (emailState.value.isBlank()){
-            "Null Value "
-        } else{
-            _forgotPass.value = AuthState(isLoading = true)
-            viewModelScope.launch {
-                when (val result = authRepository.forgotPassword(emailState.value)) {
-                    is Resource.Success -> {
-                        _forgotPass.value = AuthState(isLoading = false, isSuccessful = true)
 
-                    }
-                    is Resource.Failure -> {
-                        _forgotPass.value = AuthState(isLoading = false, error = result.message)
-
-                    }
-                    else -> {}
-                }
-            }
-
-        }
-    }
 
 }
