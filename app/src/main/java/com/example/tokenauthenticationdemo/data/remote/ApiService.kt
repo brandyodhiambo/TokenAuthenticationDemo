@@ -36,11 +36,6 @@ interface ApiService {
          email:String
     ):ForgotPassworResponse
 
-    @POST(RESET_PASSWORD_ENDPOINT)
-    @FormUrlEncoded
-    fun resetPassword(
-        @Body resetPasswordModel: ResetPasswordModel
-    ):Call<RefreshModel>
 
     @GET(REFRESH_ENDPOINT)
     suspend fun authorise(

@@ -23,15 +23,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tokenauthenticationdemo.ui.screens.destinations.LoginScreenDestination
 import com.example.tokenauthenticationdemo.ui.theme.*
-import com.example.tokenauthenticationdemo.ui.screens.register.AuthViewModel
+import com.example.tokenauthenticationdemo.ui.screens.register.RegisterViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@Destination(start = true)
+@Destination()
 @Composable
 fun RegisterScreen(
     navigator: DestinationsNavigator,
-    viewModel: AuthViewModel = hiltViewModel()
+    viewModel: RegisterViewModel = hiltViewModel()
 ) {
     Column(
         verticalArrangement = Arrangement.Top,

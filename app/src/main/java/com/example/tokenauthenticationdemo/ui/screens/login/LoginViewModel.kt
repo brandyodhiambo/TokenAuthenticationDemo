@@ -8,11 +8,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tokenauthenticationdemo.data.remote.request.LoginRequest
 import com.example.tokenauthenticationdemo.data.repository.AuthRepository
+import com.example.tokenauthenticationdemo.ui.screens.destinations.HomeScreenDestination
+import com.example.tokenauthenticationdemo.ui.screens.destinations.LoginScreenDestination
 import com.example.tokenauthenticationdemo.utils.AuthState
 import com.example.tokenauthenticationdemo.utils.Constants
 import com.example.tokenauthenticationdemo.utils.Resource
+import com.example.tokenauthenticationdemo.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,6 +42,8 @@ class LoginViewModel @Inject constructor(private val authRepository: AuthReposit
     fun setPassword(value: String){
         _passwordState.value = value
     }
+
+
 
     //login
     fun loginUser(){

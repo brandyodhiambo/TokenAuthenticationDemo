@@ -20,7 +20,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
+class RegisterViewModel @Inject constructor(private val authRepository: AuthRepository) : ViewModel() {
 
     private val _register = mutableStateOf(AuthState())
     val register: State<AuthState> = _register
@@ -122,10 +122,8 @@ class AuthViewModel @Inject constructor(private val authRepository: AuthReposito
             _register.value = AuthState(isLoading = true)
             val result = authRepository.authorise()
 
-            resultChannel.send(result)
             _register.value = AuthState(isLoading = false)
-
-
+            resultChannel.send(result)
         }
     }
 }

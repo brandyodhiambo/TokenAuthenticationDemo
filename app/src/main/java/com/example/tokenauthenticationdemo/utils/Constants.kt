@@ -11,4 +11,6 @@ object Constants {
     const val MIN_PHONE_LENGTH = 10
     const val MIN_PASSWORD_LENGTH = 8
 
+    const val SHARED_PREF_NAME = "SHARED_PREF_NAME"
+
 }
