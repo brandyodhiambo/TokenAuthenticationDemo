@@ -13,7 +13,6 @@ import com.example.tokenauthenticationdemo.ui.screens.destinations.LoginScreenDe
 import com.example.tokenauthenticationdemo.utils.AuthState
 import com.example.tokenauthenticationdemo.utils.Constants
 import com.example.tokenauthenticationdemo.utils.Resource
-import com.example.tokenauthenticationdemo.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow

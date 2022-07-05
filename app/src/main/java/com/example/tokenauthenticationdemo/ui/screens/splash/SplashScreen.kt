@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.tokenauthenticationdemo.ui.screens.destinations.HomeScreenDestination
 import com.example.tokenauthenticationdemo.ui.screens.destinations.LoginScreenDestination
-import com.example.tokenauthenticationdemo.utils.UiEvent
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.Dispatchers

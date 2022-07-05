@@ -7,6 +7,7 @@ object Constants {
     const val  REFRESH_ENDPOINT = "auth/token/refresh"
     const val  FORGOT_PASSWORD_ENDPOINT = "auth/password/forgot"
     const val  RESET_PASSWORD_ENDPOINT = "auth/password/reset"
+    const val CATEGORIES = "diagrams"
 
     const val MIN_PHONE_LENGTH = 10
     const val MIN_PASSWORD_LENGTH = 8
