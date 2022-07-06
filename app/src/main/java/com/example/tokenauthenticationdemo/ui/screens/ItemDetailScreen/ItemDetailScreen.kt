@@ -4,14 +4,10 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,10 +22,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.tokenauthenticationdemo.R
 import com.example.tokenauthenticationdemo.models.Diagram
+import com.example.tokenauthenticationdemo.models.Part
+import com.example.tokenauthenticationdemo.ui.screens.home.HomeViewModel
 import com.example.tokenauthenticationdemo.ui.theme.DarkPurple
 import com.example.tokenauthenticationdemo.ui.theme.Gray
 import com.example.tokenauthenticationdemo.ui.theme.Orange
@@ -40,29 +39,11 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 @Destination
 fun ItemDetailScreen(
+    part: Diagram,
+    viewModel: HomeViewModel = hiltViewModel(),
     navigator: DestinationsNavigator
 ) {
-    val product = remember {
-        Product(
-            name = "Electrical and Computer",
-            image = listOf(
-                "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YXBwbGUlMjBsYXB0b3B8ZW58MHx8MHx8&w=1000&q=80",
-                "https://imageio.forbes.com/specials-images/imageserve/62239d44f06c1f3c7579a719/Apple-Brand-M1-Model-Macbook-pro-with-colorful-light-background-/960x0.jpg?format=jpg&width=960",
-                "https://www.allround-pc.com/wp-content/uploads/2021/12/Apple-MacBook-Pro-2021-mit-M1-Pro-Chip-Notebook-Stock-1.jpg"
-            ),
-            category = "All",
-            price = "₹ 100",
-            description = "Electrical and Computer",
-            status = "Active",
-            price_per_meter = "₹ 100",
-            dealer_price = "₹ 4000",
-            quantity_on_hand = "10",
-            quantity_on_sale_order = "5",
-            weight = "340g",
-            material = "Plastic",
-            country_of_origin = "India",
-        )
-    }
+
     Scaffold(
         topBar = {
             ItemDetailTopAppBar(navigator)
@@ -70,7 +51,7 @@ fun ItemDetailScreen(
     ) {
         ItemDetailContent(
             navigator = navigator,
-            product = product,
+            part = part,
             modifier = Modifier.fillMaxSize()
         )
     }
@@ -81,50 +62,33 @@ fun ItemDetailScreen(
 fun ItemDetailContent(
     navigator: DestinationsNavigator,
     modifier: Modifier = Modifier,
-    product: Product
+    part: Diagram
 ) {
     Column {
-        val isEndless:Boolean = false
-        val item:List<String> = product.image
-        val listState = rememberLazyListState(
-            if (isEndless) Int.MAX_VALUE /2 else 0
-        )
-        LazyRow(
-            state = listState,
-            modifier = modifier
+        Card(
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
                 .padding(top = 2.dp, start = 1.dp, end = 1.dp)
-        ){
-            items(
-                count = if (isEndless) Int.MAX_VALUE /2 else item.size,
-                itemContent = {
-                    val index = it%item.size
-                    val image = item[index]
-                    Card(
-                        shape = RoundedCornerShape(8.dp),
-                        modifier = Modifier.padding(8.dp)
-                    ) {
-                        Image(
-                            painter = rememberAsyncImagePainter(
-                                ImageRequest.Builder(LocalContext.current)
-                                    .data(data = image)
-                                    .apply(block = fun ImageRequest.Builder.() {
-                                        crossfade(true)
-                                        placeholder(R.drawable.ic_launcher_background)
-                                    }).build()
-                            ),
-                            contentDescription = null,
-                            modifier = modifier
-                                .fillMaxSize()
-                                .height(250.dp),
-                            contentScale = ContentScale.Crop
-                        )
 
-                    }
-
-                }
+        ) {
+            Image(
+                painter = rememberAsyncImagePainter(
+                    ImageRequest.Builder(LocalContext.current)
+                        .data(data = part.image)
+                        .apply(block = fun ImageRequest.Builder.() {
+                            crossfade(true)
+                            placeholder(R.drawable.ic_launcher_background)
+                        }).build()
+                ),
+                contentDescription = null,
+                modifier = modifier
+                    .fillMaxSize()
+                    .height(250.dp),
+                contentScale = ContentScale.Crop
             )
+
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -147,21 +111,21 @@ fun ItemDetailContent(
                     verticalArrangement = Arrangement.Top
                 ) {
                     Text(
-                        text = product.name,
+                        text = part.name,
                         color = Color.Black,
                         fontWeight = FontWeight.Bold,
                         fontSize = 24.sp,
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = product.dealer_price,
+                        text = "${part.parts.map { it.dealerPrice }}",
                         color = Color.Black,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 18.sp,
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "Category: ${product.category}",
+                        text = "Category: ${part.name}",
                         color = Color.Black,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 16.sp,
@@ -177,7 +141,7 @@ fun ItemDetailContent(
                         })
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "Status: ${product.status}",
+                            text = "Status: ${part.status}",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Gray,
@@ -194,7 +158,7 @@ fun ItemDetailContent(
                         })
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "Quantity on Hand: ${product.quantity_on_hand}",
+                            text = "Quantity on Hand: ${part.parts.map { it.quantityOnHand }}",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Gray,
@@ -211,7 +175,7 @@ fun ItemDetailContent(
                         })
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "Quantity on Sale: ${product.quantity_on_sale_order}",
+                            text = "Quantity on Sale: ${part.parts.map { it.quantityOnSaleOrder }}",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Gray,
@@ -228,7 +192,7 @@ fun ItemDetailContent(
                         })
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "Weight: ${product.weight}",
+                            text = "Weight: ${part.parts.map { it.weight }}",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Gray,
@@ -245,7 +209,7 @@ fun ItemDetailContent(
                         })
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "Material: ${product.material}",
+                            text = "Material: ${part.parts.map { it.material }}",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Gray,
@@ -262,7 +226,7 @@ fun ItemDetailContent(
                         })
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
-                            text = "Country of Origin: ${product.country_of_origin}",
+                            text = "Country of Origin: ${part.parts.map { it.weight }}",
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.Gray,
@@ -273,49 +237,6 @@ fun ItemDetailContent(
                     Spacer(modifier = Modifier.height(10.dp))
                     val rating: Float by remember { mutableStateOf(3f) }
 
-                  /*  Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        RatingBar(
-                            value = rating,
-                            config = RatingBarConfig()
-                                .activeColor(Orange)
-                                .inactiveColor(Color.Gray)
-                                .stepSize(StepSize.HALF)
-                                .numStars(5)
-                                .isIndicator(true)
-                                .size(16.dp)
-                                .padding(3.dp)
-                                .style(RatingBarStyle.HighLighted),
-                            onValueChange = {},
-                            onRatingChanged = {}
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Row(
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            IconButton(onClick = { *//*TODO*//* }) {
-                                Icon(
-                                    imageVector = Icons.Default.Share,
-                                    tint = Orange,
-                                    contentDescription = null
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(8.dp))
-                            IconButton(onClick = { TODO }) {
-                                Icon(
-                                    imageVector = Icons.Default.AddCircle,
-                                    tint = Orange,
-                                    contentDescription = null
-                                )
-                            }
-                        }
-
-                    }*/
-
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = "Description:",
@@ -325,7 +246,7 @@ fun ItemDetailContent(
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = product.description,
+                        text = part.description,
                         color = Color.Black,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Light

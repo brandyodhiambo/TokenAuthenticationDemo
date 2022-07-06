@@ -1,6 +1,5 @@
-package com.example.tokenauthenticationdemo.data.local
+package com.example.tokenauthenticationdemo.data.local.categories
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao

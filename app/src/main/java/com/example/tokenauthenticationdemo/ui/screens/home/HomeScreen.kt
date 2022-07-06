@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -24,6 +25,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,10 +34,11 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.example.tokenauthenticationdemo.R
 import com.example.tokenauthenticationdemo.models.Diagram
-import com.example.tokenauthenticationdemo.ui.screens.destinations.ItemScreenDestination
+import com.example.tokenauthenticationdemo.ui.screens.destinations.ItemDetailScreenDestination
 import com.example.tokenauthenticationdemo.ui.theme.DarkPurple
 import com.example.tokenauthenticationdemo.ui.theme.Gray
 import com.example.tokenauthenticationdemo.ui.theme.Orange
+import com.example.tokenauthenticationdemo.utils.LoadingAnimation
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -78,15 +81,6 @@ fun HomeScreen(
                           fontWeight = FontWeight.SemiBold,
                           fontSize = 18.sp,
                       )
-                      Text(
-                          text = "See All",
-                          color = Orange,
-                          fontSize = 14.sp,
-                          fontWeight = FontWeight.SemiBold,
-                          modifier = Modifier.clickable {
-                              //navigate to category screen
-                          }.padding(end = 8.dp)
-                      )
 
                   }
               }
@@ -119,6 +113,25 @@ fun HomeScreen(
 
               }
           }
+
+            if (productsState.isLoading) {
+                LoadingAnimation(
+                    modifier = Modifier.align(Center),
+                    circleSize = 16.dp,
+                )
+            }
+
+            if (productsState.error != null)
+            {
+                Text(
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .align(Center)
+                        .padding(16.dp),
+                    text = "${productsState.error}",
+                    color = Color.Red
+                )
+            }
         }
     }
 
@@ -134,7 +147,7 @@ fun ProductItem(
         modifier = Modifier
             .padding(4.dp)
             .clickable {
-                navigator.navigate(ItemScreenDestination(product))
+                navigator.navigate(ItemDetailScreenDestination(product))
             },
         elevation = 2.dp,
         backgroundColor = Gray,
@@ -182,7 +195,7 @@ fun ProductItem(
 
                 Text(
                     text = product.description,
-                    maxLines = 2,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Light
@@ -196,7 +209,7 @@ fun ProductItem(
                         modifier = Modifier
                             .size(18.dp)
                             .align(CenterVertically),
-                        painter = painterResource(id = R.drawable.ic_launcher_background),
+                        painter = painterResource(id = R.drawable.ic_star),
                         contentDescription = null,
                         tint = Orange
                     )
@@ -222,6 +235,7 @@ fun HomeScreenTopBar(
     viewModel: HomeViewModel
    // navigator: DestinationsNavigator
 ) {
+    val productsState by viewModel.productsState
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -274,7 +288,7 @@ fun HomeScreenTopBar(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = CenterVertically
         ) {
-            val item by remember { mutableStateOf("") }
+            val item by remember { mutableStateOf(viewModel.searchTerm.value) }
             TextField(
                 value = viewModel.searchTerm.value,
                 onValueChange = {
@@ -283,15 +297,13 @@ fun HomeScreenTopBar(
                 placeholder = {
                     Text(
                         text = "Search",
-                        //color = primaryGray
                     )
                 },
-
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.White, shape = RoundedCornerShape(8.dp))
                     .clickable {
-
+                        viewModel.getCategories(item)
                     }
                     .padding(start = 8.dp, end = 8.dp),
                 shape = RoundedCornerShape(size = 8.dp),

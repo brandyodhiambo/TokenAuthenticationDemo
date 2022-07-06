@@ -21,7 +21,6 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _selectedCategory = mutableStateOf("All")
-
     val selectedCategory: State<String> = _selectedCategory
     fun setCategory(value: String) {
         _selectedCategory.value = value
@@ -37,6 +36,9 @@ class HomeViewModel @Inject constructor(
         _searchTerm.value = term
     }
 
+    private val _eventFlow = MutableSharedFlow<UiEvents>()
+    val eventFlow: SharedFlow<UiEvents> = _eventFlow.asSharedFlow()
+
     init {
         getCategories(selectedCategory.value)
     }
@@ -46,7 +48,7 @@ class HomeViewModel @Inject constructor(
             categoriesRepository.getItem().collectLatest { result ->
                 when (result) {
                     is Resource.Success -> {
-                        if(category == "All"){wor
+                        if(category == "All"){
                             _productState.value = productsState.value.copy(
                                 categories = result.data?.categories ?: emptyList(),
                                 products = result.data?.diagram ?: emptyList(),
@@ -55,10 +57,11 @@ class HomeViewModel @Inject constructor(
                         else{
                             _productState.value = productsState.value.copy(
                                 categories = result.data?.categories ?: emptyList(),
-                                products = result.data?.diagram?.filter { it.name == category } ?: emptyList(),
+                                products = result.data?.diagram/*?.filter { it.name == category }*/ ?: emptyList(),
                                 isLoading = false
                             )
                         }
+                       // getPart(result.data?.diagram?.get(0)?.id ?: "Jj0eyLZ2NYOD3oawmdn5b7vlqG81b96M4BWXKxrRpz" )
 
 
                     }
@@ -74,6 +77,31 @@ class HomeViewModel @Inject constructor(
                         )
                     }
                     else -> {}
+                }
+            }
+        }
+    }
+    private fun getPart(id:String){
+        viewModelScope.launch {
+            categoriesRepository.getParts(id).collectLatest { parts->
+                when(parts){
+                    is Resource.Loading->{
+                        _productState.value = productsState.value.copy(
+                            isLoading = true
+                        )
+                    }
+                    is Resource.Success->{
+                        _productState.value = productsState.value.copy(
+                            partsEntity = parts.data,
+                            isLoading = false
+                        )
+                    }
+                    is Resource.Failure->{
+                        _productState.value = productsState.value.copy(
+                            error = parts.message ?: "Unknown Error Occurred",
+                            isLoading = false
+                        )
+                    }
                 }
             }
         }

@@ -5,7 +5,7 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.example.tokenauthenticationdemo.data.converters.Converters
-import com.example.tokenauthenticationdemo.data.local.ItemDataBase
+import com.example.tokenauthenticationdemo.data.local.database.ItemDataBase
 import com.example.tokenauthenticationdemo.data.remote.ApiService
 import com.example.tokenauthenticationdemo.data.repository.AuthRepository
 import com.example.tokenauthenticationdemo.data.repository.CategoriesRepository

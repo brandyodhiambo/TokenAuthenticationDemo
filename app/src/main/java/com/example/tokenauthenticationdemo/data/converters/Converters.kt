@@ -35,6 +35,36 @@ class Converters @Inject constructor(private val gson: Gson) {
             object : TypeToken<ArrayList<Category>>() {}.type
         ) ?: "[]"
     }
+    @TypeConverter
+    fun fromImagesJson(json: String): List<Image> {
+        return gson.fromJson<ArrayList<Image>>(
+            json,
+            object : TypeToken<ArrayList<Image>>() {}.type
+        ) ?: emptyList()
+    }
+
+    @TypeConverter
+    fun toImagesJson(follow: List<Image>): String {
+        return gson.toJson(
+            follow,
+            object : TypeToken<ArrayList<Image>>() {}.type
+        ) ?: "[]"
+    }
+    @TypeConverter
+    fun fromTypeJson(json: String): List<String> {
+        return gson.fromJson<ArrayList<String>>(
+            json,
+            object : TypeToken<ArrayList<String>>() {}.type
+        ) ?: emptyList()
+    }
+
+    @TypeConverter
+    fun toTypeJson(follow: List<String>): String {
+        return gson.toJson(
+            follow,
+            object : TypeToken<ArrayList<String>>() {}.type
+        ) ?: "[]"
+    }
 
     @TypeConverter
     fun fromPartsJson(json: String): List<Part> {

@@ -1,9 +1,8 @@
 package com.example.tokenauthenticationdemo.data.repository
 
-import androidx.lifecycle.LiveData
-import com.example.tokenauthenticationdemo.data.local.CustomItemEntity
-import com.example.tokenauthenticationdemo.data.local.ItemDataBase
-import com.example.tokenauthenticationdemo.data.local.ItemsEntitiy
+import com.example.tokenauthenticationdemo.data.local.categories.CustomItemEntity
+import com.example.tokenauthenticationdemo.data.local.database.ItemDataBase
+import com.example.tokenauthenticationdemo.data.local.parts.PartsEntity
 import com.example.tokenauthenticationdemo.data.remote.ApiService
 import com.example.tokenauthenticationdemo.data.remote.SafeApiCall
 import com.example.tokenauthenticationdemo.utils.Resource
@@ -15,12 +14,12 @@ import timber.log.Timber
 class CategoriesRepository(
     private val apiService: ApiService,
     private val itemDataBase: ItemDataBase
-):SafeApiCall(){
+){
     suspend fun getItem(): Flow<Resource<CustomItemEntity>>{
         return flow {
             emit(Resource.Loading())
 
-            val item = itemDataBase.dao.getItems()
+            val item = itemDataBase.itemsDao.getItems()
             Timber.d("item: $item")
 
             if (item != null){
@@ -28,7 +27,7 @@ class CategoriesRepository(
             }else{
                 try {
                     val data = apiService.categories()
-                    //itemDataBase.dao.deleteItem()
+                    //itemDataBase.itemsDao.deleteItem()
                     Timber.d("data: $data")
 
                    val customItem = CustomItemEntity(
@@ -36,9 +35,9 @@ class CategoriesRepository(
                        categories = data.data.categories
                    )
 
-                    itemDataBase.dao.insertItem(customItem)
+                    itemDataBase.itemsDao.insertItem(customItem)
 
-                    val databaseItems = itemDataBase.dao.getItems()
+                    val databaseItems = itemDataBase.itemsDao.getItems()
                     if (databaseItems != null) {
                         emit(Resource.Success(data = databaseItems))
                     }
@@ -55,10 +54,32 @@ class CategoriesRepository(
     }
 
 
-    suspend fun deleteItem(){
-        itemDataBase.dao.deleteItem()
-    }
-    suspend fun insertItem(item:CustomItemEntity){
-        itemDataBase.dao.insertItem(item)
-    }
+  suspend fun getParts(id:String): Flow<Resource<PartsEntity>>{
+      return flow {
+          emit(Resource.Loading())
+
+          val parts = itemDataBase.partsDao.getParts()
+          if (parts !=null){
+              emit(Resource.Success(data = parts))
+          }else{
+              try {
+                  val data = apiService.part(id)
+                 itemDataBase.partsDao.insertParts(data)
+
+                  val databaseParts = itemDataBase.partsDao.getParts()
+                  if (databaseParts!=null){
+                      emit(Resource.Success(data = databaseParts))
+                  }
+
+              }catch (e:HttpException){
+                  emit(
+                      Resource.Failure(
+                          message = "Opps something went wrong",
+                          data = parts
+                      )
+                  )
+              }
+          }
+      }
+  }
 }

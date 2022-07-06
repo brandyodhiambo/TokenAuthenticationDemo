@@ -1,20 +1,17 @@
 package com.example.tokenauthenticationdemo.data.remote
 
-import com.example.tokenauthenticationdemo.data.local.ItemsEntitiy
-import com.example.tokenauthenticationdemo.data.remote.request.ForgotPasswordRequest
+import com.example.tokenauthenticationdemo.data.local.categories.ItemsEntitiy
+import com.example.tokenauthenticationdemo.data.local.parts.PartsEntity
 import com.example.tokenauthenticationdemo.data.remote.request.LoginRequest
 import com.example.tokenauthenticationdemo.data.remote.request.RegisterRequest
 import com.example.tokenauthenticationdemo.data.remote.response.forgotpassword.ForgotPassworResponse
 import com.example.tokenauthenticationdemo.data.remote.response.loginres.LoginResponse
 import com.example.tokenauthenticationdemo.data.remote.response.registerres.RegisterResponse
-import com.example.tokenauthenticationdemo.models.*
 import com.example.tokenauthenticationdemo.utils.Constants.CATEGORIES
 import com.example.tokenauthenticationdemo.utils.Constants.FORGOT_PASSWORD_ENDPOINT
 import com.example.tokenauthenticationdemo.utils.Constants.LOGIN_ENDPOINT
 import com.example.tokenauthenticationdemo.utils.Constants.REFRESH_ENDPOINT
 import com.example.tokenauthenticationdemo.utils.Constants.REGISTER_ENDPOINT
-import com.example.tokenauthenticationdemo.utils.Constants.RESET_PASSWORD_ENDPOINT
-import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiService {
@@ -46,6 +43,11 @@ interface ApiService {
 
     @GET(CATEGORIES)
     suspend fun categories(): ItemsEntitiy
+
+    @GET("parts/{id}")
+    suspend fun part(
+        @Path("id") id:String
+    ): PartsEntity
 
 
 }
